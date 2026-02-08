@@ -20,7 +20,7 @@ The production ready one shall be shipped with the release of KiCad 10.
 Or the KiCad MCP Server will fail to initialize due to missing write permission while installing the python package.
 
 2. Open either the PCB or Schematic editor, click the "Robot" button to toggle the Copilot panel
-3. Click the Settings (Gear) button, paste your OpenAI API key. There shall be an existing built-int KiCad MCP Server available.
+3. Click the Settings (Gear) button, fill in both the **OpenAI API Key** and the **OpenAI Endpoint**. There shall be an existing built-int KiCad MCP Server available.
 
 ## Architecture
 
