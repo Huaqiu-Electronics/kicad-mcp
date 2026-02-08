@@ -2,6 +2,8 @@
 
 We are integrating MCP into KiCad, issues and pull requests are welcome.
 
+![KiCad MCP Demo](docs/kicad-mcp-demo.gif)
+
 ## Features
 
 **Full MCP support Out of the box**
@@ -29,7 +31,6 @@ Or the KiCad MCP Server will fail to initialize due to missing write permission 
 The KiCad Client now has the full MCP capabilities by embedding the [mcp-agent](https://github.com/lastmile-ai/mcp-agent).
 
 KiCad editors( PCB/ Schematic) will atomically start a [KiCad MCP Client](https://github.com/Huaqiu-Electronics/kicad-mcp-client) instance on launch and pass both the dual-communicating IPC channel and the KiCad IPC API url to it.
-
 
 ### KiCad IPC API
 
@@ -66,7 +67,6 @@ git clone https://github.com/Huaqiu-Electronics/kicad-mcp-server.git
 ```
 
 Don't forget to commit your changes and open a pull request.
-
 
 ## Troubleshooting
 
