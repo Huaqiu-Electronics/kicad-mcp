@@ -18,4 +18,4 @@ dependencies = [
 
 [tool.uv]
 # use pip mirror
-index-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+index-url = "https://mirrors.aliyun.com/pypi/simple"
