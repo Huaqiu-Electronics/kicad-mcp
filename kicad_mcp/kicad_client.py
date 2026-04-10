@@ -6,8 +6,8 @@ import xml.etree.ElementTree as ET
 import pynng
 import json
 
-from kicad_mcp_server.schema import API_PLACE_NETLABEL_PARAMS, KiCadCommand
-from kicad_mcp_server.valid_editors import VALID_EDITORS
+from kicad_mcp.schema import API_PLACE_NETLABEL_PARAMS, KiCadCommand
+from kicad_mcp.valid_editors import VALID_EDITORS
 
 
 logger = logging.getLogger(__name__)

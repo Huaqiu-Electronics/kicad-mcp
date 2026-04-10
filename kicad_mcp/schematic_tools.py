@@ -1,15 +1,15 @@
 import json
 import logging
-from kicad_mcp_server.sdk_api_params import (
+from kicad_mcp.sdk_api_params import (
     API_MULTI_LINES_PARAMS, API_HIER_SHEET_PARAMS, API_CLASS_LABEL_PARAMS, API_TEXTBOX_PARAMS, API_TABLE_PARAMS,
     API_LABEL_PARAMS, API_QUERY_SYMBOL, API_QUERY_RESULT,
     API_SYMBOL_LIBARARY_LIST, API_PLACE_SYMBOL, API_MOVE_SYMBOL, API_ROTATE_SYMBOL,
     API_MODIFY_SYMBOL_VALUE, API_MODIFY_SYMBOL_REFERENCE, API_CREATE_SYMBOL_LIBARARY,
     API_CREATE_LIB_SYMBOL_PIN
 )
-from kicad_mcp_server.schema import API_PLACE_NETLABELS
+from kicad_mcp.schema import API_PLACE_NETLABELS
 from typechat import TypeChatJsonTranslator, TypeChatValidator, Failure
-from kicad_mcp_server.utils import typechat_get_llm
+from kicad_mcp.utils import typechat_get_llm
 
 logger = logging.getLogger(__name__)
 KICAD_CLIENT = None

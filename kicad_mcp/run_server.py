@@ -2,18 +2,18 @@ import os
 import argparse
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
-from kicad_mcp_server.kicad_client import KiCadClient
+from kicad_mcp.kicad_client import KiCadClient
 
-import kicad_mcp_server.common_tools as common_tools
-import kicad_mcp_server.schematic_tools as schematic_tools
-import kicad_mcp_server.pcb_tools as pcb_tools
-from kicad_mcp_server.utils import (
+import kicad_mcp.common_tools as common_tools
+import kicad_mcp.schematic_tools as schematic_tools
+import kicad_mcp.pcb_tools as pcb_tools
+from kicad_mcp.utils import (
     get_logger,
     wait_for_kicad_pid,
     build_socket_url,
     wait_for_connection,
 )
-from kicad_mcp_server.valid_editors import VALID_EDITORS
+from kicad_mcp.valid_editors import VALID_EDITORS
 
 # Load environment variables
 load_dotenv()

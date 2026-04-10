@@ -1,6 +1,6 @@
 import json
 import logging
-from kicad_mcp_server.sdk_api_params import (
+from kicad_mcp.sdk_api_params import (
     API_ARC_PARAMS,
     API_BEZIER_PARAMS,
     API_CIRCLE_PARAMS,
