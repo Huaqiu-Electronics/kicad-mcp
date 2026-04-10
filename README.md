@@ -1,7 +1,12 @@
 # kicad-mcp
 
-KiCad MCP integrated with the KiCad IPC API.
+# kicad-mcp-server
 
+KiCad MCP Server integrated with the KiCad IPC API.
+
+[![PyPI version](https://badge.fury.io/py/kicad-mcp.svg)](https://pypi.org/project/kicad-mcp/)
+[![Python](https://img.shields.io/pypi/pyversions/kicad-mcp.svg)](https://pypi.org/project/kicad-mcp/)
+[![License](https://img.shields.io/pypi/l/kicad-mcp.svg)](https://github.com/Huaqiu-Electronics/kicad-mcp/blob/main/LICENSE)
 ---
 
 ## Usage
@@ -120,7 +125,3 @@ Modify the code and restart your MCP client to see changes.
 - Ensure KiCad is running with IPC enabled
 
 ---
-
-## License
-
-MIT (or your preferred license)

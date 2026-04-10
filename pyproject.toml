@@ -1,8 +1,9 @@
 [project]
 name = "kicad-mcp"
-version = "0.1.1"
+version = "0.1.2"
 description = "KiCad MCP Server"
 readme = "README.md"
+requires-python = ">=3.11"
 
 license = { text = "MIT" } 
 authors = [
