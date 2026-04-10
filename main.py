@@ -3,7 +3,7 @@ from logging.handlers import RotatingFileHandler
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
 import os
-import sys
+import time
 from enum import Enum
 import base64
 import xml.etree.ElementTree as ET
@@ -114,22 +114,37 @@ class API_PLACE_NETLABELS(TypedDict):
 VALID_EDITORS = ["schematic", "pcb", "footprint", "symbol"]
 
 
+
+
 class KiCadClient:
-
     def __init__(self, socket_url: str, editor_type: str):
-        """Initialize KiCad client with NNG socket URL"""
-
         if editor_type not in VALID_EDITORS:
             raise ValueError(f"Invalid editor type. Must be one of {VALID_EDITORS}")
         
         self.editor_type = editor_type
-        logger.info(f"Initializing KiCadClient with socket URL: {socket_url}")
         self.socket_url = socket_url
+
+        logger.info(f"Initializing KiCadClient with socket URL: {socket_url}")
+
         self.req_socket = pynng.Req0(
-            recv_timeout=30000, send_timeout=30000
-        )  # 30 seconds timeout
-        self.req_socket.dial(socket_url)
-        logger.info(f"Successfully connected to KiCad SDK at: {socket_url}")
+            recv_timeout=30000,
+            send_timeout=30000
+        )
+
+        self._connect_with_retry()
+
+    def _connect_with_retry(self, retries=20, delay=0.3):
+        for i in range(retries):
+            try:
+                # force blocking connect
+                self.req_socket.dial(self.socket_url, block=True)
+                logger.info(f"Connected to KiCad SDK at: {self.socket_url}")
+                return
+            except pynng.exceptions.ConnectionRefused:
+                logger.debug(f"Connection attempt {i+1} failed, retrying...")
+                time.sleep(delay)
+
+        raise RuntimeError(f"Failed to connect to KiCad SDK: {self.socket_url}")
 
     def get_netlist(self) -> str | None:
         """Get the complete XML representation of the current KiCad project"""
@@ -2379,12 +2394,40 @@ def showSpiceSimulator():
 
 
 
+def wait_for_kicad_pid(timeout=30):
+
+    import psutil
+    import time
+
+    start = time.time()
+
+    while time.time() - start < timeout:
+        for proc in psutil.process_iter(['pid', 'name']):
+            name = proc.info['name']
+            if name and name.lower() in ("kicad.exe", "pcbnew.exe", "eeschema.exe"):
+                return proc.info['pid']
+        time.sleep(0.5)
+
+    return None
+
+def build_socket_url(pid, editor):
+    return f"ipc://kicad_sdk_pair-{pid}-{editor}"
+
+
+def wait_for_connection(client_cls, socket_url, editor, retries=20):
+    import time
+    for _ in range(retries):
+        try:
+            return client_cls(socket_url, editor_type=editor)
+        except Exception:
+            time.sleep(0.5)
+    raise RuntimeError("Failed to connect to KiCad socket")
 
 if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser(description="KiCad MCP Server")
-    parser.add_argument("socket_url", help="KiCad SDK socket URL")
+    parser.add_argument("--socket-url", help="KiCad SDK socket URL")
     parser.add_argument("--api-key", help="OpenAI API key")
     parser.add_argument("--base-url", help="OpenAI base URL")
     parser.add_argument("--model", help="OpenAI model name")    
@@ -2405,9 +2448,28 @@ if __name__ == "__main__":
     if args.model:
         os.environ["OPENAI_MODEL"] = args.model
 
-    # Initialize KiCad client with the provided socket URL
-    logger.info(f"Initializing KiCad client with socket URL: {args.socket_url}")
-    KICAD_CLIENT = KiCadClient(args.socket_url, editor_type=args.editor_type)
+    socket_url = None
+    if args.socket_url:
+        socket_url = args.socket_url
+    else:
+        if not args.editor_type:
+            raise RuntimeError("editor-type required when socket_url not provided")
+
+        logger.info("Waiting for KiCad process...")
+        pid = wait_for_kicad_pid()
+
+        if not pid:
+            raise RuntimeError("KiCad not found")
+
+        socket_url = build_socket_url(pid, args.editor_type)
+
+    logger.info(f"Using socket URL: {socket_url}")
+
+    KICAD_CLIENT = wait_for_connection(
+        KiCadClient,
+        socket_url,
+        args.editor_type
+    )
 
     # Run MCP server
     logger.info("Starting MCP server with stdio transport")
