@@ -3,6 +3,13 @@ name = "kicad-mcp-server"
 version = "0.1.0"
 description = "KiCad MCP Server"
 readme = "README.md"
+
+license = { text = "MIT" } 
+authors = [
+  { name = "Ethan Chien", email = "liangtie.qian@gmail.com" }
+]
+
+
 requires-python = ">=3.11"
 dependencies = [
     "beautifulsoup4>=4.13.3",
@@ -23,5 +30,3 @@ kicad-mcp-server = "kicad_mcp_server.run_server:run_server"
 
 [tool.uv]
 package = true
-# use pip mirror
-index-url = "https://mirrors.aliyun.com/pypi/simple"
