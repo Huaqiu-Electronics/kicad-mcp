@@ -1,15 +1,42 @@
 # kicad-mcp
 
+Kicad MCP Sever integrated with KiCad IPC API
 
+## Usage
 
-## Troubleshooting
+### Debug locally
 
-➜ bin .\uv.exe --directory .\kicad-mcp\ run main.py ipc:///tmp/kicad_copilot_pair-01f28a7e-b101-4e7d-99bd-000057a08613de968b72.ipc
-  × Failed to download `pynng==0.8.1`                                                                                                                           
-  ├─▶ Failed to fetch:
-  │   `https://pypi.tuna.tsinghua.edu.cn/packages/8e/e3/63ab15b96be4e61be4d563b78eb716be433afb68871b82cdc7ab0a579037/pynng-0.8.1-cp311-cp311-win_amd64.whl`
-  ╰─▶ HTTP status client error (403 Forbidden) for url
-      (https://pypi.tuna.tsinghua.edu.cn/packages/8e/e3/63ab15b96be4e61be4d563b78eb716be433afb68871b82cdc7ab0a579037/pynng-0.8.1-cp311-cp311-win_amd64.whl)
+1. Clone this repository say `C:/code/kicad-mcp`
 
+2. Configure the mcp settings in your preferred MCP client (e.g. vscode)
 
-Config global proxy and retry
+```json
+{
+	"servers": {
+		"kicad-pcb-mcp": {
+			"type": "stdio",
+			"command": "uv",
+			"args": [
+				"--directory",
+				"C:/code/kicad-mcp",
+				"run",
+				"kicad-mcp",
+				"--editor-type",
+				"pcb"
+			]
+		},
+		"kicad-schematic-mcp": {
+			"type": "stdio",
+			"command": "uv",
+			"args": [
+				"--directory",
+				"C:/code/kicad-mcp",
+				"run",
+				"kicad-mcp",
+				"--editor-type",
+				"schematic"
+			]
+		}
+	}
+}
+```
