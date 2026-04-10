@@ -35,8 +35,7 @@ Add the following configuration to your MCP client:
 
 ### Example (Cherry Studio)
 
-![Cherry Studio Setup](docs/setup-in-cherry-studio.png)
-
+![Cherry Studio Setup](https://raw.githubusercontent.com/Huaqiu-Electronics/kicad-mcp/main/docs/setup-in-cherry-studio.png)
 ---
 
 ### Options
