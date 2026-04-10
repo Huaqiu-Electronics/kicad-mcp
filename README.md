@@ -3,7 +3,6 @@
 KiCad MCP integrated with the KiCad IPC API.
 
 [![PyPI version](https://badge.fury.io/py/kicad-mcp.svg)](https://pypi.org/project/kicad-mcp/)
-[![Python](https://img.shields.io/pypi/pyversions/kicad-mcp.svg)](https://pypi.org/project/kicad-mcp/)
 [![License](https://img.shields.io/pypi/l/kicad-mcp.svg)](https://github.com/Huaqiu-Electronics/kicad-mcp/blob/main/LICENSE)
 ---
 
