@@ -1,6 +1,6 @@
 # kicad-mcp
 
-KiCad MCP Server integrated with the KiCad IPC API.
+KiCad MCP integrated with the KiCad IPC API.
 
 ---
 
@@ -11,7 +11,7 @@ KiCad MCP Server integrated with the KiCad IPC API.
 You can run the MCP server directly without installing it using `uvx`:
 
 ```bash
-uvx kicad-mcp-server --editor-type schematic
+uvx kicad-mcp --editor-type schematic
 ```
 
 This will download and execute the latest version from PyPI in an isolated environment.
@@ -25,7 +25,7 @@ Add the following configuration to your MCP client:
 ```json
 {
   "command": "uvx",
-  "args": ["kicad-mcp-server", "--editor-type", "schematic"]
+  "args": ["kicad-mcp", "--editor-type", "schematic"]
 }
 ```
 
@@ -54,7 +54,7 @@ Add the following configuration to your MCP client:
 
 ```bash
 git clone <your-repo-url>
-cd kicad-mcp-server
+cd kicad-mcp
 ```
 
 ---
@@ -71,9 +71,9 @@ Example configuration:
       "command": "uv",
       "args": [
         "--directory",
-        "C:/code/kicad-mcp-server",
+        "C:/code/kicad-mcp",
         "run",
-        "kicad-mcp-server",
+        "kicad-mcp",
         "--editor-type",
         "pcb"
       ]
@@ -83,9 +83,9 @@ Example configuration:
       "command": "uv",
       "args": [
         "--directory",
-        "C:/code/kicad-mcp-server",
+        "C:/code/kicad-mcp",
         "run",
-        "kicad-mcp-server",
+        "kicad-mcp",
         "--editor-type",
         "schematic"
       ]
@@ -102,7 +102,7 @@ Install dependencies and run:
 
 ```bash
 uv sync
-uv run kicad-mcp-server --editor-type schematic
+uv run kicad-mcp --editor-type schematic
 ```
 
 ---
