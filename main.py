@@ -111,12 +111,18 @@ class API_PLACE_NETLABELS(TypedDict):
 
     nets: List[API_PLACE_NETLABEL_PARAMS]
 
+VALID_EDITORS = ["schematic", "pcb", "footprint", "symbol"]
+
 
 class KiCadClient:
-    """Client for interacting with the KiCad SDK server using NNG Request/Reply pattern"""
 
-    def __init__(self, socket_url: str):
+    def __init__(self, socket_url: str, editor_type: str):
         """Initialize KiCad client with NNG socket URL"""
+
+        if editor_type not in VALID_EDITORS:
+            raise ValueError(f"Invalid editor type. Must be one of {VALID_EDITORS}")
+        
+        self.editor_type = editor_type
         logger.info(f"Initializing KiCadClient with socket URL: {socket_url}")
         self.socket_url = socket_url
         self.req_socket = pynng.Req0(
@@ -2381,8 +2387,14 @@ if __name__ == "__main__":
     parser.add_argument("socket_url", help="KiCad SDK socket URL")
     parser.add_argument("--api-key", help="OpenAI API key")
     parser.add_argument("--base-url", help="OpenAI base URL")
-    parser.add_argument("--model", help="OpenAI model name")
-    
+    parser.add_argument("--model", help="OpenAI model name")    
+    parser.add_argument(
+        "--editor-type",
+        type=str,
+        choices=VALID_EDITORS,
+        help="Editor type (schematic, pcb, footprint, symbol)",
+    )
+
     args = parser.parse_args()
     
     # Set environment variables from command-line arguments if provided
@@ -2392,10 +2404,10 @@ if __name__ == "__main__":
         os.environ["OPENAI_BASE_URL"] = args.base_url
     if args.model:
         os.environ["OPENAI_MODEL"] = args.model
-    
+
     # Initialize KiCad client with the provided socket URL
     logger.info(f"Initializing KiCad client with socket URL: {args.socket_url}")
-    KICAD_CLIENT = KiCadClient(args.socket_url)
+    KICAD_CLIENT = KiCadClient(args.socket_url, editor_type=args.editor_type)
 
     # Run MCP server
     logger.info("Starting MCP server with stdio transport")
