@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import TypedDict
 from typing_extensions import TypedDict, List
 
 
@@ -8,7 +7,6 @@ class KiCadCommand(str, Enum):
 
     NET_LIST = "netlist"
     PLACE_NET_LABELS = "placeNetLabels"
-
 
 
 class API_PLACE_NETLABEL_PIN(TypedDict):
@@ -29,6 +27,3 @@ class API_PLACE_NETLABELS(TypedDict):
     """Container for multiple net label placements"""
 
     nets: List[API_PLACE_NETLABEL_PARAMS]
-
-
-

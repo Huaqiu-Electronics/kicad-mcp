@@ -182,7 +182,7 @@ class API_SYMBOL_PIN_LABEL( TypedDict):
     - label_text: str, Functional label text of the pin (naming rules: follow component datasheet or circuit design norms, supports ASCII/Chinese characters, e.g., "VCC", "GND", "GPIO_0", "TXD", "SDA", "RESET")
                   Function: Describe the functional purpose of the pin (e.g., power supply, signal input/output, control), the core for engineers to understand pin function in schematic design
     """
-    refernce : str
+    reference : str
     pin_number : str
     label_text : str
 

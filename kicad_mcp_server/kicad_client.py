@@ -1,13 +1,16 @@
 from typing import Any
-from venv import logger
+import logging
 import time
 import base64
 import xml.etree.ElementTree as ET
 import pynng
 import json
 
-from schema import API_PLACE_NETLABEL_PARAMS, KiCadCommand
-from valid_editors import VALID_EDITORS
+from kicad_mcp_server.schema import API_PLACE_NETLABEL_PARAMS, KiCadCommand
+from kicad_mcp_server.valid_editors import VALID_EDITORS
+
+
+logger = logging.getLogger(__name__)
 
 
 class KiCadClient:
@@ -24,7 +27,7 @@ class KiCadClient:
 
         self._connect_with_retry()
 
-    def _connect_with_retry(self, retries=20, delay=0.3):
+    def _connect_with_retry(self, retries=2, delay=0.2):
         for i in range(retries):
             try:
                 # force blocking connect
@@ -118,7 +121,7 @@ class KiCadClient:
 
     def cpp_sdk_action(
         self, api_name: str, params: Any = {}, cmd_type: str = "cpp_sdk_action"
-    )-> Any:  
+    ) -> Any:
         """
         Common asynchronous function to call KiCad CPP SDK API via HTTP POST request
         ----------

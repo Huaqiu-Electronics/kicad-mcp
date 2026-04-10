@@ -1,7 +1,7 @@
 [project]
-name = "documentation"
+name = "kicad-mcp-server"
 version = "0.1.0"
-description = "Add your description here"
+description = "KiCad MCP Server"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -15,8 +15,13 @@ dependencies = [
     "typechat>=0.0.4",
     "pynng>=0.8.1",
     "psutil",
+    "python-dotenv",
 ]
 
+[project.scripts]
+kicad-mcp-server = "kicad_mcp_server.run_server:run_server"
+
 [tool.uv]
+package = true
 # use pip mirror
 index-url = "https://mirrors.aliyun.com/pypi/simple"

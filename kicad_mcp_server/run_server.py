@@ -1,15 +1,19 @@
 import os
 import argparse
-import logging
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
-from kicad_client import KiCadClient
+from kicad_mcp_server.kicad_client import KiCadClient
 
-import common_tools
-import schematic_tools
-import pcb_tools
-from utils import get_logger, wait_for_kicad_pid, build_socket_url, wait_for_connection
-from valid_editors import VALID_EDITORS
+import kicad_mcp_server.common_tools as common_tools
+import kicad_mcp_server.schematic_tools as schematic_tools
+import kicad_mcp_server.pcb_tools as pcb_tools
+from kicad_mcp_server.utils import (
+    get_logger,
+    wait_for_kicad_pid,
+    build_socket_url,
+    wait_for_connection,
+)
+from kicad_mcp_server.valid_editors import VALID_EDITORS
 
 # Load environment variables
 load_dotenv()
@@ -23,12 +27,14 @@ mcp = FastMCP("kicad-mcp-server")
 # Global KiCad client instance (initially None)
 KICAD_CLIENT: KiCadClient = None
 
-if __name__ == "__main__":
+
+def run_server():
+    global KICAD_CLIENT
     parser = argparse.ArgumentParser(description="KiCad MCP Server")
     parser.add_argument("--socket-url", help="KiCad SDK socket URL")
     parser.add_argument("--api-key", help="OpenAI API key")
     parser.add_argument("--base-url", help="OpenAI base URL")
-    parser.add_argument("--model", help="OpenAI model name")    
+    parser.add_argument("--model", help="OpenAI model name")
     parser.add_argument(
         "--editor-type",
         type=str,
@@ -37,7 +43,7 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    
+
     # Set environment variables from command-line arguments if provided
     if args.api_key:
         os.environ["OPENAI_API_KEY"] = args.api_key
@@ -63,20 +69,14 @@ if __name__ == "__main__":
 
     logger.info(f"Using socket URL: {socket_url}")
 
-    KICAD_CLIENT = wait_for_connection(
-        KiCadClient,
-        socket_url,
-        args.editor_type
-    )
-
-    # Initialize Context for Tool Modules
-    common_tools.init_context(KICAD_CLIENT, logger)
-    schematic_tools.init_context(KICAD_CLIENT, logger)
-    pcb_tools.init_context(KICAD_CLIENT, logger)
+    # Initialize Context for Tool Modules (with None initially)
+    common_tools.init_context(None, logger)
+    schematic_tools.init_context(None, logger)
+    pcb_tools.init_context(None, logger)
 
     # List of tools to register
     tools_to_register = common_tools.TOOLS[:]
-    
+
     if args.editor_type in ["schematic", "symbol"]:
         tools_to_register.extend(schematic_tools.TOOLS)
     elif args.editor_type in ["pcb", "footprint"]:
@@ -85,6 +85,16 @@ if __name__ == "__main__":
     # Dynamically register tools
     for tool in tools_to_register:
         mcp.tool()(tool)
+
+    # Attempt to connect to KiCad
+    try:
+        KICAD_CLIENT = wait_for_connection(KiCadClient, socket_url, args.editor_type)
+        # Update context after connection
+        common_tools.init_context(KICAD_CLIENT, logger)
+        schematic_tools.init_context(KICAD_CLIENT, logger)
+        pcb_tools.init_context(KICAD_CLIENT, logger)
+    except Exception as e:
+        logger.error(f"Failed to connect to KiCad: {e}. Server will start but tools will fail until connected.")
 
     # Run MCP server
     logger.info("Starting MCP server with stdio transport")

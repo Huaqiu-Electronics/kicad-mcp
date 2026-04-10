@@ -1,7 +1,6 @@
 import json
 import logging
-from typing import Optional, Any
-from sdk_api_params import (
+from kicad_mcp_server.sdk_api_params import (
     API_PCB_TRACK_PARAMS, API_PCB_VIA_PARAMS, API_PCB_PAD_PARAMS,
     API_MOVE_PCB_PAD_PARAMS, API_ROTATE_PCB_PAD, API_MODIFY_PAD_NUMBER,
     API_MODIFY_PAD_SIZE, API_MODIFY_PAD_DRILL_SIZE, API_MODIFY_PAD_DRILL_SHAPE,
