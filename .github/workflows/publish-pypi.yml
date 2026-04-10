@@ -1,0 +1,43 @@
+name: Publish Package to PyPI
+
+on:
+  push:
+    tags:
+      - "v*"   # v1.2.3
+  workflow_dispatch:
+
+jobs:
+  publish:
+    name: Build and publish package to PyPI
+    runs-on: ubuntu-latest
+
+    # ✅ REQUIRED for Trusted Publishing
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: Install dependencies
+        run: uv sync --frozen --all-extras --dev
+
+      - name: Build package
+        run: uv build
+
+      - name: Upload artifacts (optional, for debugging)
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-dists
+          path: dist/
+
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
