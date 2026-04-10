@@ -1044,7 +1044,7 @@ wheels = [
 ]
 
 [[package]]
-name = "kicad-mcp-server"
+name = "kicad-mcp"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

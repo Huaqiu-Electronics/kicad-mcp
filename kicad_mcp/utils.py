@@ -14,20 +14,20 @@ def get_logger():
         log_dir = os.path.join(
             os.getenv("APPDATA", os.getenv("TEMP", os.getcwd())),
             "kicad-mcp",
-            "kicad-mcp-server",
+            "kicad-mcp",
         )
     else:  # Linux/MacOS
         log_dir = os.path.join(
             os.getenv("XDG_CACHE_HOME", os.path.join(os.getenv("HOME"), ".cache")),
             "kicad-mcp",
-            "kicad-mcp-server",
+            "kicad-mcp",
         )
 
     # Ensure the log directory exists
     os.makedirs(log_dir, exist_ok=True)
 
     # Configure logging
-    log_file = os.path.join(log_dir, "kicad-mcp-server.log")
+    log_file = os.path.join(log_dir, "kicad-mcp.log")
 
     # Always log to stderr to avoid corrupting MCP stdio transport
     console_handler = logging.StreamHandler(sys.stderr)
@@ -49,7 +49,7 @@ def get_logger():
             handlers=[console_handler],  # Only console logging when not in DEBUG mode
         )
 
-    return logging.getLogger("kicad-mcp-server")
+    return logging.getLogger("kicad-mcp")
 
 
 def typechat_get_llm(

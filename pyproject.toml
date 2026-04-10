@@ -1,5 +1,5 @@
 [project]
-name = "kicad-mcp-server"
+name = "kicad-mcp"
 version = "0.1.0"
 description = "KiCad MCP Server"
 readme = "README.md"
@@ -26,7 +26,7 @@ dependencies = [
 ]
 
 [project.scripts]
-kicad-mcp-server = "kicad_mcp_server.run_server:run_server"
+kicad-mcp = "kicad_mcp.run_server:run_server"
 
 [tool.uv]
 package = true

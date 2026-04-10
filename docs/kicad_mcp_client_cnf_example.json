@@ -27,11 +27,11 @@
           "chrome-devtools-mcp@latest"
         ]
       },
-      "kicad-mcp-server": {
+      "kicad-mcp": {
         "command": "uv",
         "args": [
           "--directory",
-          "C:/code/kicad-mcp-server",
+          "C:/code/kicad-mcp",
           "run",
           "main.py",
           "2137"

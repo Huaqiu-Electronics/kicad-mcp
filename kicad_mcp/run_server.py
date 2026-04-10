@@ -22,7 +22,7 @@ load_dotenv()
 logger = get_logger()
 
 # Initialize MCP server
-mcp = FastMCP("kicad-mcp-server")
+mcp = FastMCP("kicad-mcp")
 
 # Global KiCad client instance (initially None)
 KICAD_CLIENT: KiCadClient = None
