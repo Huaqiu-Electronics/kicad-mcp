@@ -1,8 +1,6 @@
 # kicad-mcp
 
-# kicad-mcp-server
-
-KiCad MCP Server integrated with the KiCad IPC API.
+KiCad MCP integrated with the KiCad IPC API.
 
 [![PyPI version](https://badge.fury.io/py/kicad-mcp.svg)](https://pypi.org/project/kicad-mcp/)
 [![Python](https://img.shields.io/pypi/pyversions/kicad-mcp.svg)](https://pypi.org/project/kicad-mcp/)
