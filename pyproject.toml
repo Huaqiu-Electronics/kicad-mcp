@@ -1,6 +1,6 @@
 [project]
 name = "kicad-mcp"
-version = "0.1.4"
+version = "0.1.5"
 description = "KiCad MCP Server"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -30,3 +30,5 @@ kicad-mcp = "kicad_mcp.run_server:run_server"
 
 [tool.uv]
 package = true
+# use pip mirror for faster installation
+index-url = "https://mirrors.aliyun.com/pypi/simple"
