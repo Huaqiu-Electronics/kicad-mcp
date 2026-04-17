@@ -1,12 +1,8 @@
 import os
 import argparse
 from dotenv import load_dotenv
-from mcp.server.fastmcp import FastMCP
 from kicad_mcp.kicad_client import KiCadClient
 
-import kicad_mcp.common_tools as common_tools
-import kicad_mcp.schematic_tools as schematic_tools
-import kicad_mcp.pcb_tools as pcb_tools
 from kicad_mcp.utils import (
     get_logger,
     wait_for_kicad_pid,
@@ -14,15 +10,13 @@ from kicad_mcp.utils import (
     wait_for_connection,
 )
 from kicad_mcp.valid_editors import VALID_EDITORS
+from kicad_mcp.server import mcp
 
 # Load environment variables
 load_dotenv()
 
 # Initialize Logger
 logger = get_logger()
-
-# Initialize MCP server
-mcp = FastMCP("kicad-mcp")
 
 # Global KiCad client instance (initially None)
 KICAD_CLIENT: KiCadClient = None
@@ -69,30 +63,34 @@ def run_server():
 
     logger.info(f"Using socket URL: {socket_url}")
 
+    # Always register common tools
+    import kicad_mcp.common_tools as common_tools
+    
+    # Conditionally import and register tools based on editor type
+    active_schematic = args.editor_type in ["schematic", "symbol"]
+    active_pcb = args.editor_type in ["pcb", "footprint"]
+    
+    if active_schematic:
+        import kicad_mcp.schematic_tools as schematic_tools
+    if active_pcb:
+        import kicad_mcp.pcb_tools as pcb_tools
+
     # Initialize Context for Tool Modules (with None initially)
     common_tools.init_context(None, logger)
-    schematic_tools.init_context(None, logger)
-    pcb_tools.init_context(None, logger)
-
-    # List of tools to register
-    tools_to_register = common_tools.TOOLS[:]
-
-    if args.editor_type in ["schematic", "symbol"]:
-        tools_to_register.extend(schematic_tools.TOOLS)
-    elif args.editor_type in ["pcb", "footprint"]:
-        tools_to_register.extend(pcb_tools.TOOLS)
-
-    # Dynamically register tools
-    for tool in tools_to_register:
-        mcp.tool()(tool)
+    if active_schematic:
+        schematic_tools.init_context(None, logger)
+    if active_pcb:
+        pcb_tools.init_context(None, logger)
 
     # Attempt to connect to KiCad
     try:
         KICAD_CLIENT = wait_for_connection(KiCadClient, socket_url, args.editor_type)
         # Update context after connection
         common_tools.init_context(KICAD_CLIENT, logger)
-        schematic_tools.init_context(KICAD_CLIENT, logger)
-        pcb_tools.init_context(KICAD_CLIENT, logger)
+        if active_schematic:
+            schematic_tools.init_context(KICAD_CLIENT, logger)
+        if active_pcb:
+            pcb_tools.init_context(KICAD_CLIENT, logger)
     except Exception as e:
         logger.error(f"Failed to connect to KiCad: {e}. Server will start but tools will fail until connected.")
 
