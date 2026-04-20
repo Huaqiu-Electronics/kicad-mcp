@@ -20,20 +20,69 @@ This will download and execute the latest version from PyPI in an isolated envir
 
 ---
 
-### MCP client configuration (e.g. VS Code, Claude Desktop)
+### MCP client configuration 
+
+1. Claude Code
+
+```json
+{
+	"mcpServers": {
+		"Kicad-Schematic-MCP": {
+			"type": "stdio",
+			"command": "uvx",
+			"args": [
+				"kicad-mcp",
+				"--editor-type",
+				"schematic"
+			]
+		},
+		"Kicad-PCB-MCP": {
+			"type": "stdio",
+			"command": "uvx",
+			"args": [
+				"kicad-mcp",
+				"--editor-type",
+				"pcb"
+			]
+		}
+	},
+	"inputs": []
+}
+```
+
+2. VSCode
 
 Add the following configuration to your MCP client:
 
 ```json
 {
-  "command": "uvx",
-  "args": ["kicad-mcp", "--editor-type", "schematic"]
+	"servers": {
+		"Kicad-Schematic-MCP": {
+			"type": "stdio",
+			"command": "uvx",
+			"args": [
+				"kicad-mcp",
+				"--editor-type",
+				"schematic"
+			]
+		},
+		"Kicad-PCB-MCP": {
+			"type": "stdio",
+			"command": "uvx",
+			"args": [
+				"kicad-mcp",
+				"--editor-type",
+				"pcb"
+			]
+		}
+	},
+	"inputs": []
 }
 ```
 
 ---
 
-### Example (Cherry Studio)
+3. Cherry Studio
 
 ![Cherry Studio Setup](https://raw.githubusercontent.com/Huaqiu-Electronics/kicad-mcp/main/docs/setup-in-cherry-studio.png)
 ---
@@ -62,7 +111,7 @@ cd kicad-mcp
 
 ### 2. Configure MCP client (local development)
 
-Example configuration:
+Example configuration in VSCode:
 
 ```json
 {
